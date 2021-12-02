@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "metodo simplex"
+version = "0.1.0"
+description = ""
+authors = ["AndyPythonCode <andyarciniegas24@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.70.0"
+Jinja2 = "^3.0.2"
+
+[tool.poetry.dev-dependencies]
+uvicorn = "^0.15.0"
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

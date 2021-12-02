@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+Solucion
+{% endblock %}
+
+{% block content %}
+<div class="mb-auto">
+    <h1 class="text-center          
+                    font-bold
+                    tracking-widest
+                    text-neutral-600
+                    lg:text-5xl
+                    md:text-4xl
+                    text-3xl
+                    mt-4">
+        Metodo Simplex | Solucion
+    </h1>
+
+    <div class="flex justify-center mt-8">
+        <div class="min-w-full px-32">
+            {% for tabla in tablas %}
+            <div class="py-4 sm:px-6 lg:px-8">
+                <div class="shadow border-b border-gray-200 sm:rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200 text-center">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    Z
+                                </th>
+                                <!--Cantidad de Xn-->
+                                {% for variable in range(objetivo | int)%}
+                                <th scope="col"
+                                    class="px-6 py-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    {{variable + 1}}X
+                                </th>
+                                {% endfor %}
+                                <!--Cantidad de Sn-->
+                                {% for variable in range(restriccion | int)%}
+                                <th scope="col"
+                                    class="px-6 py-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    {{variable + 1}}S
+                                </th>
+                                {% endfor %}
+                                <th scope="col"
+                                    class="px-6 py-3 text-base font-medium text-gray-500 uppercase tracking-wider">
+                                    Sol
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for matriz in tabla %}
+                                <tr>
+                                    {% for variables in matriz%}
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{variables}}</div>
+                                    </td>
+                                    {% endfor%}
+                                </tr>
+                            <!-- Siguiente... -->
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if mensaje %}
+        <p class="text-center mt-4 px-32 text-red-500 md:text-2xl sm:text-xl">{{mensaje}}</p>
+    {% endif %}
+
+    <section>
+        <div class="relative items-center w-full px-5 pt-10 mx-auto  md:px-12 lg:px-24 max-w-7xl">
+            <div class="p-6 border-l-4 border-green-500 -6 rounded-r-xl bg-green-50">
+                <div class="ml-3">
+                    <div class="md:text-2xl sm:text-xl text-green-600 text-center">
+                        <p>{{salida}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

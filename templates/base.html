@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+  <title>Metodo Simplex | {% block title %}{% endblock %}</title>
+  <link rel="shortcut icon" href="static/matematicas.png" type="image/x-icon" />
+</head>
+<div></div>
+
+<body class="flex flex-col h-screen">
+  {% block content %} {% endblock %}
+  <footer aria-labelledby="footer-heading">
+    <h2 id="footer-heading" class="sr-only">Footer</h2>
+    <div class="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-16">
+      <div class="flex flex-wrap items-baseline justify-center">
+        <span class="mt-2 text-sm font-light text-black">
+          Copyright © 2021 - 2022
+          <a href="https://www.flaticon.es/autores/smashicons" class="mx-2 text-wickedblue hover:text-gray-700"
+            rel="noopener noreferrer">Iconos diseñados por Smashicons | </a>Andy Arciniega</span>
+      </div>
+    </div>
+  </footer>
+
+  {% block script %}
+  {% endblock %}
+</body>
+
+</html>

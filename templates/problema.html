@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+Problema
+{% endblock %}
+
+{% block content %}
+<div class="mb-auto mx-auto p-10">
+    <h1 class="text-center          
+                font-bold
+                tracking-tighter
+                text-neutral-600
+                lg:text-5xl
+                md:text-4xl
+                text-3xl
+                mt-10">
+        Metodo Simplex | Problema
+    </h1>
+
+    <form action="/solucion/" method="post" class="border-2 p-16 mt-6" >
+        <span class="text-gray-700 text-left text-3xl font-bold">Objetivo:</span>
+        <div class="flex justify-center">
+            <label class="block mb-4">
+                <select name="operacion" class="form-select w-72 mt-1 border-2 py-2">
+                    <option value="maximizar">Maximizar</option>
+                    <option value="minimizar" disabled>Minimizar</option>
+                </select>
+            </label>
+        </div>
+
+        <h2 class="my-6 text-3xl text-blue-500 font-bold">Función Objetivo:</h2>
+        <p class="inline text-xl font-semibold text-black">Z =</p>
+        {% for i in range(request.query_params['variables'] | int) %}
+            <!--Custom input-->
+            {% include "common/objetivo.html" %}
+            {% if i != request.query_params['variables'] | int -1%}
+                <p class="inline text-xl font-semibold text-black">X{{i+1}}+</p>
+            {% else%}
+                <p class="inline text-xl font-semibold text-black">X{{i+1}}</p>
+            {% endif%}
+        {% endfor %}
+
+        <h2 class="mb-4 mt-6 text-3xl text-blue-500 font-bold">Restricciones:</h2>
+        {% for i in range(request.query_params['restriccion'] | int) %}
+            <p class="my-2 text-xl font-semibold text-black">Restriccion {{i+1}}</p>
+            {% for k in range(request.query_params['variables'] | int) %}
+                <!--Custom input-->
+                {% include "common/variable.html" %}
+
+                {% if k != request.query_params['variables'] | int -1%}
+                    <p class="inline text-xl font-semibold text-black">X{{k+1}}+</p>
+                {% else%}
+                    <p class="inline text-xl font-semibold text-black">X{{k+1}}</p>
+                    <label class="inline mx-2">
+                        <select name="ecuacion{{i}}" class="form-select w-16 border-2 py-2">
+                            <option value="menorigual">≤</option>
+                        </select>
+                    </label>
+                {% include "common/igualdad.html" %}
+                {% endif%}
+            {% endfor %}
+        {% endfor %}
+        
+        <div class="text-right my-5">
+            <div class="inline text-base font-semibold text-black">
+                {% for x in range(request.query_params['variables'] | int) %}
+                <span>X{{x + 1}}</span>
+                    {% if x == request.query_params['variables'] | int -1 %}
+                        <span> ≥ 0</span>
+                    {% else %}
+                        <span>,</span>
+                    {% endif %}
+                {% endfor%}
+            </div>
+        </div>
+
+        <button type="submit" class="
+                                mt-4
+                                flex
+                                items-center
+                                justify-center
+                                w-full
+                                px-10
+                                py-4
+                                text-base
+                                font-medium
+                                text-center text-white
+                                transition
+                                duration-500
+                                ease-in-out
+                                transform
+                                bg-blue-400
+                                rounded-xl
+                                hover:bg-blue-500
+                                focus:outline-none
+                                focus:ring-2
+                                focus:ring-offset-2
+                                focus:ring-blue-500
+                            "> Resolver </button>
+    </form>
+</div>
+{% endblock %}
