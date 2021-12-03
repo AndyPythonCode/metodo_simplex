@@ -7,3 +7,6 @@ a = f(5)
 print(next(a))
 print(next(a))
 
+a = "24"
+
+print(a.find("."))

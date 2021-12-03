@@ -1,6 +1,8 @@
 from settings import templates
 from fastapi import APIRouter, Request
-from .metodo import metodo_simplex
+from .maximizar import metodo_simplex_maximizar
+from .minimizar import metodo_simplex_minimizar
+from .salida import salida_de_variables
 
 router_views = APIRouter(tags=["Views"])
 
@@ -18,11 +20,12 @@ async def solucion(request: Request):
     form = form.decode("utf-8") # Decodificar el binario
     form = eval(string_query_to_dict(form)) # Aca obtengo todos lo datos sin ningun caracter extra;o
     objetivo, restriccion = numero_matriz(form) # Saber la dimencion de la matriz
-    matriz = datos(form) # Armar la matriz en fila y columna
+    matriz, operacion = datos(form) # Armar la matriz en fila y columna
     matriz = crear_matriz(matriz, objetivo, restriccion) # Agregar variable de holgura y todo lo que hace falta
-    tablas, variables, mensaje = metodo_simplex(matriz, objetivo, restriccion)
+    tablas, mensaje = metodo_simplex_maximizar(matriz) if operacion == "maximizar" else metodo_simplex_minimizar(matriz)
+    salida = salida_de_variables(tablas[-1], objetivo, restriccion)
     return templates.TemplateResponse("solucion.html", {"request":request, "tablas":tablas, "objetivo":objetivo, 
-                                                        "restriccion":restriccion, "salida":variables, "mensaje":mensaje})
+                                                        "restriccion":restriccion, "salida":salida, "mensaje":mensaje})
 
 # Funciones
 def crear_matriz(matriz, objetivo, restriccion):
@@ -63,17 +66,25 @@ def numero_matriz(form: dict):
     for i in form:
         if i.startswith("objetivo"):
             contar_variables_objetivo += 1
-        if not form[i].replace("-","").isdigit(): # Para los numeros negativos
+        if i.startswith("ecuacion"):
             contar_restricciones += 1
-    return contar_variables_objetivo , contar_restricciones - 1
+    return contar_variables_objetivo , contar_restricciones
+
+def determinar_valor(valor: str):
+    if valor.find(".") != -1: # Si se encuentra el punto es float
+        return float(valor)
+    return int(valor)
 
 def datos(form: dict):
     matriz = []
+    operacion = ""
     for element in form:
         if element.startswith("objetivo"):
-            matriz.append(int(form[element]) * -1)
+            matriz.append(determinar_valor(form[element]) * -1)
         if element.startswith("variable"):
-            matriz.append(int(form[element]))
+            matriz.append(determinar_valor(form[element]))
         if element.startswith("igualdad"):
-            matriz.append(int(form[element]))
-    return matriz
+            matriz.append(determinar_valor(form[element]))
+        if element.startswith("operacion"):
+            operacion += form[element]
+    return matriz, operacion
