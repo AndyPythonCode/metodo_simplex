@@ -19,7 +19,8 @@ Solucion
 
     <div class="flex justify-center mt-8">
         <div class="min-w-full px-32">
-            {% for tabla in tablas %}
+            {% set count = {'index': 0} %}
+            {% for tabla in objeto.matriz %}
             <div class="py-4 sm:px-6 lg:px-8">
                 <div class="shadow border-b border-gray-200 sm:rounded-lg">
                     <table class="min-w-full divide-y divide-gray-200 text-center">
@@ -30,14 +31,14 @@ Solucion
                                     Z
                                 </th>
                                 <!--Cantidad de Xn-->
-                                {% for variable in range(objetivo | int)%}
+                                {% for variable in range(objeto.objetivos | int)%}
                                 <th scope="col"
                                     class="px-6 py-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                                     {{variable + 1}}X
                                 </th>
                                 {% endfor %}
                                 <!--Cantidad de Sn-->
-                                {% for variable in range(restriccion | int)%}
+                                {% for variable in range(objeto.restricciones | int)%}
                                 <th scope="col"
                                     class="px-6 py-3 text-base font-medium text-gray-500 uppercase tracking-wider">
                                     {{variable + 1}}S
@@ -51,9 +52,9 @@ Solucion
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             {% for matriz in tabla %}
-                                <tr>
+                                <tr class="{{'bg-yellow-50' if objeto.lista_index_pivote[count.index][1] == loop.index - 1 }}">
                                     {% for variables in matriz%}
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap {{'bg-yellow-50' if objeto.lista_index_pivote[count.index][0] == loop.index - 1 }}">
                                         <div class="text-sm text-gray-900">{{variables}}</div>
                                     </td>
                                     {% endfor%}
@@ -64,12 +65,13 @@ Solucion
                     </table>
                 </div>
             </div>
+            {% if count.update({'index': count.index + 1}) %} {% endif %}
             {% endfor %}
         </div>
     </div>
 
-    {% if mensaje %}
-        <p class="text-center mt-4 px-32 text-red-500 md:text-2xl sm:text-xl">{{mensaje}}</p>
+    {% if objeto.solucion_no_acotada %}
+        <p class="text-center mt-4 px-32 text-red-500 md:text-2xl sm:text-xl">{{objeto.solucion_no_acotada}}</p>
     {% endif %}
 
     <section>
@@ -77,7 +79,7 @@ Solucion
             <div class="p-6 border-l-4 border-green-500 -6 rounded-r-xl bg-green-50">
                 <div class="ml-3">
                     <div class="md:text-2xl sm:text-xl text-green-600 text-center">
-                        <p>{{salida}}</p>
+                        <p>{{objeto.respuesta}}</p>
                     </div>
                 </div>
             </div>
