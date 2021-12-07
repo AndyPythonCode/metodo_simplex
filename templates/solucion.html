@@ -52,9 +52,9 @@ Solucion
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             {% for matriz in tabla %}
-                                <tr class="{{'bg-yellow-50' if objeto.lista_index_pivote[count.index][1] == loop.index - 1 }}">
+                                <tr class="{{'bg-yellow-50' if objeto.lista_index_pivote[count.index][1] == loop.index - 1 and objeto.lista_index_pivote|length != count.index + 1}}">
                                     {% for variables in matriz%}
-                                    <td class="px-6 py-4 whitespace-nowrap {{'bg-yellow-50' if objeto.lista_index_pivote[count.index][0] == loop.index - 1 }}">
+                                    <td class="px-6 py-4 whitespace-nowrap {{'bg-yellow-50' if objeto.lista_index_pivote[count.index][0] == loop.index - 1 and objeto.lista_index_pivote|length != count.index + 1}}">
                                         <div class="text-sm text-gray-900">{{variables}}</div>
                                     </td>
                                     {% endfor%}

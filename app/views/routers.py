@@ -7,7 +7,7 @@ from app.views.manipular import EntradaDinamica
 router_views = APIRouter(tags=["Views"])
 
 
-@router_views .get("/")
+@router_views.get("/")
 def home(request: Request):
     return templates.TemplateResponse("home.html", {"request":request})
 

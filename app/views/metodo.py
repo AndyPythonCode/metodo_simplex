@@ -44,7 +44,8 @@ class MetodoSimplex:
             try:
                 self.index_fila_pivote = fila_solucion.index(min(e for e in fila_solucion if isinstance(e, int) or isinstance(e, float))) + 1
             except:
-                self.solucion_no_acotada = "No se puede seleccionar una fila pivote para determinar la variable que debe dejar la base."
+                if self.funcion_objetivo[:1] != [1]:
+                    self.solucion_no_acotada = "No se puede seleccionar una fila pivote para determinar la variable que debe dejar la base."
 
     # Dividir 'Fila pivote' / 'Elemento pivote' para convertir el 1 'Elemento pivote'
     def elemento_pivote_en_uno(self) -> float:
