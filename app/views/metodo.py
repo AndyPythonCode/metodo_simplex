@@ -15,6 +15,7 @@ class MetodoSimplex:
         self.elemento_pivote: int = 0
         self.nueva_tabla: List = []
         self.respuesta: str = ""
+        self.columna_entrada = ["Z"] + [f"{index+1}X" for index in range(self.objetivos)] + [f"{index+1}S" for index in range(self.restricciones)]
 
     # La posicion de la fila a convertir en 1
     def fila_pivote(self) -> None:
@@ -36,16 +37,15 @@ class MetodoSimplex:
         fila_solucion.pop(0)  # Funcion objetivo no se incluye
 
         # Si son todos negativos en 'Columna Pivote' no tiene solucion optima
-        if all([True if numero < 0 else False for numero in fila_solucion]):
-            self.solucion_no_acotada = "El problema tiene solución ilimitada (no acotada), es decir, una variable debe de entrar pero ninguna puede salir."  
+        if all([True if numero <= 0 else False for numero in fila_solucion]):
+            self.solucion_no_acotada = f"El problema tiene solución ilimitada (no acotada), es decir, {self.columna_entrada[self.index_columna_pivote]} debe de entrar pero ninguna puede salir."  
         else:
             # Dividir 'Columna Pivote' / 'Columna Sol'
             fila_solucion = list(map(lambda x, y: x / y if y > 0 and x > 0 else "No se puede", columna_solucion, fila_solucion))
             try:
                 self.index_fila_pivote = fila_solucion.index(min(e for e in fila_solucion if isinstance(e, int) or isinstance(e, float))) + 1
             except:
-                if self.funcion_objetivo[:1] != [1]:
-                    self.solucion_no_acotada = "No se puede seleccionar una fila pivote para determinar la variable que debe dejar la base."
+                self.solucion_no_acotada = "No se puede seleccionar una fila pivote para determinar la variable que debe dejar la base."
 
     # Dividir 'Fila pivote' / 'Elemento pivote' para convertir el 1 'Elemento pivote'
     def elemento_pivote_en_uno(self) -> float:
@@ -76,9 +76,6 @@ class MetodoSimplex:
     # Imprimir resultado
     def salida_de_variables(self):
         length = len(self.ultima_tabla[0]) # Cantidad de columnas
-        columna_entrada = ["Z"]
-        columna_entrada += [f"{index+1}X" for index in range(self.objetivos)]
-        columna_entrada += [f"{index+1}S" for index in range(self.restricciones)]
 
         columnas = [[] for _ in range(length)] # Creamos cada columna
 
@@ -91,7 +88,11 @@ class MetodoSimplex:
         for index, variables_de_entrada in enumerate(columnas):
             if variables_de_entrada.count(0) == self.restricciones:
                 # Columna y valor a la variable de salida
-                variables_de_salida.append((index, columnas[index].index(1)))
+                try:
+                    variables_de_salida.append((index, columnas[index].index(1)))
+                except ValueError:
+                    # Aveces contiene otro valores que no son "1" y saca una excepcion
+                    ... 
 
         for letra, lugar in variables_de_salida:
-            self.respuesta += f" [{columna_entrada[letra]} = {columnas[-1][lugar]}]  "
+            self.respuesta += f" [{self.columna_entrada[letra]} = {columnas[-1][lugar]}]  "

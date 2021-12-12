@@ -29,8 +29,8 @@ class Maximizar(MetodoSimplex):
     
     # La posicion de la columna a convertir en 1
     def columna_pivote(self) -> None:
-        minimo = self.funcion_objetivo[0]
         posicion = 0
+        minimo = self.funcion_objetivo[posicion]
         for index, numero in enumerate(self.funcion_objetivo):
             if minimo > numero:
                 minimo = numero
